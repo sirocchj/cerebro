@@ -694,6 +694,8 @@ object ClusterRelocatingShards extends ClusterStub {
     """.stripMargin
   )
 
+  val indexingComplete = Json.obj()
+
   val main = Json.parse(
     """
       |{
