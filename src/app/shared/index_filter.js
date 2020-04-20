@@ -1,8 +1,8 @@
-function IndexFilter(name, closed, special, indexing_complete, healthy, asc, timestamp) {
+function IndexFilter(name, closed, special, complete, healthy, asc, timestamp) {
   this.name = name;
   this.closed = closed;
   this.special = special;
-  this.indexing_complete = indexing_complete;
+  this.complete = complete;
   this.healthy = healthy;
   this.sort = 'name';
   this.asc = asc;
@@ -29,7 +29,7 @@ function IndexFilter(name, closed, special, indexing_complete, healthy, asc, tim
       this.name,
       this.closed,
       this.special,
-      this.indexing_complete,
+      this.complete,
       this.healthy,
       this.asc,
       this.timestamp
@@ -42,7 +42,7 @@ function IndexFilter(name, closed, special, indexing_complete, healthy, asc, tim
       this.name === other.name &&
       this.closed === other.closed &&
       this.special === other.special &&
-      this.indexing_complete === other.indexing_complete &&
+      this.complete === other.complete &&
       this.healthy === other.healthy &&
       this.asc === other.asc &&
       this.timestamp === other.timestamp
@@ -54,7 +54,7 @@ function IndexFilter(name, closed, special, indexing_complete, healthy, asc, tim
       !this.name &&
       this.closed &&
       this.special &&
-      this,indexing_complete &&
+      this,complete &&
       this.healthy &&
       this.asc
     );
@@ -62,7 +62,7 @@ function IndexFilter(name, closed, special, indexing_complete, healthy, asc, tim
 
   this.matches = function(index) {
     var matches = true;
-    if (!this.indexing_complete && index.indexing_complete) {
+    if (!this.complete && index.complete) {
       matches = false;
     }
     if (!this.special && index.special) {

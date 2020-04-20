@@ -16,7 +16,8 @@ angular.module('cerebro').controller('OverviewController', ['$scope', '$http',
     $scope.indexing_complete_indices = 0;
     $scope.shardAllocation = true;
 
-    $scope.indices_filter = new IndexFilter('', false, false, false, true, true, 0);
+    $scope.indices_filter =
+      new IndexFilter('', false, false, false, true, true, 0);
     $scope.nodes_filter = new NodeFilter('', true, false, false, false, 0);
 
     $scope.getPageSize = function() {
