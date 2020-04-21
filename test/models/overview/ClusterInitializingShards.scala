@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 
 object ClusterInitializingShards {
 
-  def apply() = ClusterOverview(clusterState, nodesStats, indicesStats, clusterSettings, aliases, clusterHealth, nodes)
+  def apply() = ClusterOverview(clusterState, nodesStats, indicesStats, clusterSettings, aliases, clusterHealth, nodes, indexingComplete)
 
   val clusterState = Json.parse(
     """
@@ -567,4 +567,5 @@ object ClusterInitializingShards {
     """.stripMargin
   )
 
+  val indexingComplete = Json.obj()
 }
