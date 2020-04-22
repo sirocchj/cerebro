@@ -8,6 +8,8 @@ enablePlugins(BuildInfoPlugin, JavaServerAppPackaging, LauncherJarPlugin, PlaySc
 buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion)
 buildInfoPackage := "models"
 
+maintainer := "sirocchj"
+
 pipelineStages := Seq(digest, gzip)
 
 Compile / doc / sources := Seq.empty
@@ -17,6 +19,7 @@ dockerChmodType := DockerChmodType.UserGroupWriteExecute
 dockerExposedPorts := Seq(9000)
 dockerPermissionStrategy := DockerPermissionStrategy.Run
 dockerUpdateLatest := true
+dockerUsername := Some("sirocchj")
 Docker / daemonUser := "cerebro"
 Docker / version := version.value.replace("+", "-") // '+' is an invalid in Docker image tag string
 

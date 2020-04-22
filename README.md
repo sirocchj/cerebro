@@ -1,39 +1,43 @@
 Cerebro
 ------------
-[![Docker Pulls](https://img.shields.io/docker/pulls/lmenezes/cerebro.svg)](https://hub.docker.com/r/lmenezes/cerebro)
-[![Build Status](https://travis-ci.com/lmenezes/cerebro.svg?branch=master)](https://travis-ci.com/lmenezes/cerebro)
+[![Docker Pulls](https://img.shields.io/docker/pulls/sirocchj/cerebro.svg)](https://hub.docker.com/r/sirocchj/cerebro)
+[![Build Status](https://travis-ci.com/sirocchj/cerebro.svg?branch=master)](https://travis-ci.com/sirocchj/cerebro)
 
-cerebro is an open source(MIT License) elasticsearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
+Cerebro is an open source (MIT License) ElasticSearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
+
+------------
+## This is a WIP fork of the original Cerebro
+## Please visit [https://github.com/lmenezes/cerebro](https://github.com/lmenezes/cerebro) if you are interested in the original one
+------------
+
+This fork aims to:
+- reduce the types of installations to 2: either .tgz or docker
+- gradually replace Play with Http4s and Angular with Vue (or React)
+- implement additional features
 
 ### Requirements
+Cerebro needs Java 1.8 or newer to run.
 
-cerebro needs Java 1.8 or newer to run.
-
-### Installation
-- Download from [https://github.com/lmenezes/cerebro/releases](https://github.com/lmenezes/cerebro/releases)
-- Extract files
-- Run bin/cerebro(or bin/cerebro.bat if on Windows)
-- Access on http://localhost:9000
+### Local installation
+- Download it from [https://github.com/sirocchj/cerebro/releases](https://github.com/sirocchj/cerebro/releases)
+- Extract the files (`tar xfz cerebro-x.y.z.tgz`)
+- Run it `bin/cerebro` (or `bin/cerebro.bat` if on Windows)
+- Access it on [http://localhost:9000](http://loclhost:9000)
 
 ### Docker
-
-You can find the official docker images in the official [docker hub repo](https://hub.docker.com/r/lmenezes/cerebro/).
-
-Visit [cerebro-docker](https://github.com/lmenezes/cerebro-docker) for further information. 
+You can find the official docker images in the official [docker hub repo](https://hub.docker.com/r/sirocchj/cerebro/).
+The docker image is based on `openjdk:11.0.7-jre-slim`
 
 ### Configuration
-
 #### HTTP server address and port
-You can run cerebro listening on a different host and port(defaults to 0.0.0.0:9000):
+You can run Cerebro listening on a different host and port than the default (`0.0.0.0:9000`) by:
 
 ```
 bin/cerebro -Dhttp.port=1234 -Dhttp.address=127.0.0.1
 ```
 
 #### LDAP config
-
-LDAP can be configured using environment variables. If you typically run cerebro using docker,
-you can pass a file with all the env vars. The file would look like:
+LDAP can be configured using the following environment variables:
 
 ```bash
 # Set it to ldap to activate ldap authorization
@@ -76,18 +80,17 @@ LDAP_BIND_PWD=adminpass
 
 ```
 
-You can the pass this file as argument using:
+When using Docker, you can add all the above environment variabled in a file (e.g. `env-ldap`)
+and pass this file to Docker as follows:
 
 ```bash
- docker run -p 9000:9000 --env-file env-ldap  lmenezes/cerebro
+ docker run -p 9000:9000 --env-file env-ldap sirocchj/cerebro
 ```
 
-
 #### Other settings
+Other settings are exposed through the `conf/application.conf` file found inside the application directory.
 
-Other settings are exposed through the **conf/application.conf** file found on the application directory.
-
-It is also possible to use an alternate configuration file defined on a different location:
+It is also possible to use an alternate configuration file defined on a different location using:
 
 ```
 bin/cerebro -Dconfig.file=/some/other/dir/alternate.conf
