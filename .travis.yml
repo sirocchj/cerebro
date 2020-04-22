@@ -14,7 +14,7 @@ cache:
   - "$HOME/.ivy2/cache"
   - "$HOME/.sbt"
 script:
-- sbt ++$TRAVIS_SCALA_VERSION scalafmtCheckAll scalafmtSbtChecktest universal:packageZipTarball
+- sbt ++$TRAVIS_SCALA_VERSION scalafmtCheckAll scalafmtSbtCheck test universal:packageZipTarball
 before_deploy:
 - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 deploy:
