@@ -78,8 +78,8 @@ LDAP_BIND_PWD=adminpass
 
 ```
 
-When using Docker, you can add all the above environment variabled in a file (e.g. `env-ldap`)
-and pass this file to Docker as follows:
+When using Docker, you can add all the above environment variables in a file (e.g. `env-ldap`)
+and pass it to Docker as follows:
 
 ```bash
  docker run -p 9000:9000 --env-file env-ldap sirocchj/cerebro
