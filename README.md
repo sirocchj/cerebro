@@ -5,9 +5,7 @@ Cerebro
 
 Cerebro is an open source (MIT License) ElasticSearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
 
-------------
-## This is a WIP fork of the original Cerebro
-## Please visit [https://github.com/lmenezes/cerebro](https://github.com/lmenezes/cerebro) if you are interested in the original one
+This is a WIP fork of the original Cerebro, please visit [https://github.com/lmenezes/cerebro](https://github.com/lmenezes/cerebro) if you are interested in the original one
 ------------
 
 This fork aims to:
