@@ -9,7 +9,7 @@ import services.exception.RequestFailedException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ClusterChangesDataService @Inject()(client: ElasticClient) {
+class ClusterChangesDataService @Inject() (client: ElasticClient) {
 
   val apis = Seq(
     "_aliases",
@@ -23,9 +23,9 @@ class ClusterChangesDataService @Inject()(client: ElasticClient) {
         case Some((response, idx)) =>
           throw RequestFailedException(apis(idx), response.status, response.body.toString())
         case None =>
-          val aliases = responses(0).body
+          val aliases   = responses(0).body
           val nodesInfo = responses(1).body
-          val state = responses(2).body
+          val state     = responses(2).body
 
           // open indices
           val indices = aliases.as[JsObject].keys.map(JsString(_)).toSeq
@@ -41,8 +41,8 @@ class ClusterChangesDataService @Inject()(client: ElasticClient) {
 
           val clusterName = (state \ "cluster_name").as[JsValue]
           Json.obj(
-            "indices" -> JsArray(indices ++ closedIndices),
-            "nodes" -> JsArray(nodes),
+            "indices"      -> JsArray(indices ++ closedIndices),
+            "nodes"        -> JsArray(nodes),
             "cluster_name" -> clusterName
           )
       }

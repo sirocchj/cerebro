@@ -58,7 +58,7 @@ class CommonsControllerSpec extends MockedServices {
   }
 
   def missingIndexGetIndexMapping = {
-    val body = Json.obj("host" -> "somehost")
+    val body     = Json.obj("host" -> "somehost")
     val response = route(application, FakeRequest(POST, "/commons/get_index_mapping").withBody(body)).get
     ensure(response, 400, Json.obj("error" -> "Missing required parameter index"))
   }
@@ -90,7 +90,7 @@ class CommonsControllerSpec extends MockedServices {
   }
 
   def missingIndexGetIndexSettings = {
-    val body = Json.obj("host" -> "somehost")
+    val body     = Json.obj("host" -> "somehost")
     val response = route(application, FakeRequest(POST, "/commons/get_index_settings").withBody(body)).get
     ensure(response, 400, Json.obj("error" -> "Missing required parameter index"))
   }
@@ -530,7 +530,7 @@ class CommonsControllerSpec extends MockedServices {
   }
 
   def missingNode = {
-    val body = Json.obj("host" -> "somehost")
+    val body     = Json.obj("host" -> "somehost")
     val response = route(application, FakeRequest(POST, "/commons/get_node_stats").withBody(body)).get
     ensure(response, 400, Json.obj("error" -> "Missing required parameter node"))
   }

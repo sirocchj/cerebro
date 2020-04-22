@@ -24,11 +24,12 @@ trait MockedServices extends Specification with BeforeEach with Mockito {
     org.mockito.Mockito.reset(client)
   }
 
-  val application = new GuiceApplicationBuilder().
-    overrides(
+  val application = new GuiceApplicationBuilder()
+    .overrides(
       bind[ElasticClient].toInstance(client),
       bind[AuthenticationModule].toInstance(auth)
-    ).build()
+    )
+    .build()
 
   def ensure(response: Future[Result], statusCode: Int, body: JsValue) = {
     ((contentAsJson(response) \ "body").as[JsValue] mustEqual body) and

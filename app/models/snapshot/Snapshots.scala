@@ -7,7 +7,7 @@ object Snapshots {
   def apply(json: JsValue): JsValue = {
     json match {
       case snapshots: JsObject => (snapshots \ "snapshots").as[JsArray]
-      case _ => JsArray()
+      case _                   => JsArray()
     }
   }
 

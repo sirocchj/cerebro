@@ -37,35 +37,26 @@ class RestRequestDAOSpec(implicit ee: ExecutionEnv) extends Specification {
 
   def update = {
     val dao: RestHistoryDAO = app.injector.instanceOf(classOf[RestHistoryDAO])
-    val currentTime = System.currentTimeMillis
-    val entry = RestRequest("otherPath",
-                            "otherMethod",
-                            "otherBody",
-                            "admin",
-                            new Date(currentTime))
-    val existing = dao.save(entry)
-    val updated = existing.flatMap(_ => dao.save(entry.copy(createdAt = new Date(currentTime + 1))))
+    val currentTime         = System.currentTimeMillis
+    val entry               = RestRequest("otherPath", "otherMethod", "otherBody", "admin", new Date(currentTime))
+    val existing            = dao.save(entry)
+    val updated             = existing.flatMap(_ => dao.save(entry.copy(createdAt = new Date(currentTime + 1))))
     (existing must beEqualTo(Some("fad24b7447043f5412c89b12e2b7697c")).await and
       (updated must beEqualTo(Some("fad24b7447043f5412c89b12e2b7697c")).await))
   }
 
   def maxSize = {
-    val time = System.currentTimeMillis
+    val time                = System.currentTimeMillis
     val dao: RestHistoryDAO = app.injector.instanceOf(classOf[RestHistoryDAO])
     val all = Future
       .sequence(
         Seq(
-          dao.save(
-            RestRequest("request1", "GET", "{}", "admin", new Date(time))),
-          dao.save(
-            RestRequest("request2", "GET", "{}", "admin", new Date(time + 1))),
-          dao.save(
-            RestRequest("request3", "GET", "{}", "admin", new Date(time + 2)))
+          dao.save(RestRequest("request1", "GET", "{}", "admin", new Date(time))),
+          dao.save(RestRequest("request2", "GET", "{}", "admin", new Date(time + 1))),
+          dao.save(RestRequest("request3", "GET", "{}", "admin", new Date(time + 2)))
         )
       )
-      .flatMap { _ =>
-        dao.all("admin")
-      }
+      .flatMap { _ => dao.all("admin") }
     val expected = Seq(
       RestRequest("request3", "GET", "{}", "admin", new Date(time + 2)),
       RestRequest("request2", "GET", "{}", "admin", new Date(time + 1)),

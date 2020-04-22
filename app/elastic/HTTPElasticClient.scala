@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class HTTPElasticClient @Inject()(client: WSClient) extends ElasticClient {
+class HTTPElasticClient @Inject() (client: WSClient) extends ElasticClient {
 
   def main(target: ElasticServer) =
     execute(s"", "GET", None, target)
@@ -225,7 +225,6 @@ class HTTPElasticClient @Inject()(client: WSClient) extends ElasticClient {
     execute(path, "GET", None, target)
   }
 
-
   // Repositories
   def getRepositories(target: ElasticServer) = {
     val path = s"/_snapshot"
@@ -254,8 +253,14 @@ class HTTPElasticClient @Inject()(client: WSClient) extends ElasticClient {
     execute(path, "DELETE", None, target)
   }
 
-  def createSnapshot(repository: String, snapshot: String, ignoreUnavailable: Boolean,
-                     includeGlobalState: Boolean, indices: Option[String], target: ElasticServer) = {
+  def createSnapshot(
+      repository: String,
+      snapshot: String,
+      ignoreUnavailable: Boolean,
+      includeGlobalState: Boolean,
+      indices: Option[String],
+      target: ElasticServer
+  ) = {
     val path = s"/_snapshot/${encoded(repository)}/${encoded(snapshot)}"
     val data = JsObject(
       Seq(
@@ -268,9 +273,17 @@ class HTTPElasticClient @Inject()(client: WSClient) extends ElasticClient {
     execute(path, "PUT", Some(data), target, Seq(JsonContentType))
   }
 
-  def restoreSnapshot(repository: String, snapshot: String, renamePattern: Option[String],
-                      renameReplacement: Option[String], ignoreUnavailable: Boolean, includeAliases: Boolean,
-                      includeGlobalState: Boolean, indices: Option[String], target: ElasticServer) = {
+  def restoreSnapshot(
+      repository: String,
+      snapshot: String,
+      renamePattern: Option[String],
+      renameReplacement: Option[String],
+      ignoreUnavailable: Boolean,
+      includeAliases: Boolean,
+      includeGlobalState: Boolean,
+      indices: Option[String],
+      target: ElasticServer
+  ) = {
     val path = s"/_snapshot/${encoded(repository)}/${encoded(snapshot)}/_restore"
     val data = JsObject(
       Seq(
@@ -304,35 +317,35 @@ class HTTPElasticClient @Inject()(client: WSClient) extends ElasticClient {
   def executeRequest(method: String, path: String, data: Option[JsValue], target: ElasticServer) = {
     val headers = data.map {
       case _: JsString => NdJsonContentType // if it's not a json, it is assumed that bulk or multi-search API is used
-      case _ => JsonContentType
+      case _           => JsonContentType
     }.toSeq
-    
+
     val body = data.map {
       case JsString(value) => value // needed to handle non valid json requests(multisearch, bulk...)
-      case v: JsValue => v.toString
+      case v: JsValue      => v.toString
     }
     execute(s"/${path}", method, body, target, headers)
   }
 
-  protected def execute[T](uri: String,
-                           method: String,
-                           body: Option[String] = None,
-                           target: ElasticServer,
-                           headers: Seq[(String, String)] = Seq()) = {
+  protected def execute[T](
+      uri: String,
+      method: String,
+      body: Option[String] = None,
+      target: ElasticServer,
+      headers: Seq[(String, String)] = Seq()
+  ) = {
     val authentication = target.host.authentication
-    val url = s"${target.host.name.replaceAll("/+$", "")}$uri"
+    val url            = s"${target.host.name.replaceAll("/+$", "")}$uri"
 
     val mergedHeaders = headers ++ target.headers
 
     val request =
       authentication.foldLeft(client.url(url).withMethod(method).withHttpHeaders(mergedHeaders: _*)) {
-      case (request, auth) =>
-        request.withAuth(auth.username, auth.password, WSAuthScheme.BASIC)
-    }
+        case (request, auth) =>
+          request.withAuth(auth.username, auth.password, WSAuthScheme.BASIC)
+      }
 
-    body.fold(request)(request.withBody((_))).execute.map { response =>
-      ElasticResponse(response)
-    }
+    body.fold(request)(request.withBody((_))).execute.map { response => ElasticResponse(response) }
   }
 
   // FIXME: ES > 5.X does not support indices with special characters, so this could be removed

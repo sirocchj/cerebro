@@ -9,14 +9,12 @@ import models.{CerebroResponse, Hosts}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class AnalysisController @Inject()(val authentication: AuthenticationModule,
-                                   val hosts: Hosts,
-                                   client: ElasticClient) extends BaseController {
+class AnalysisController @Inject() (val authentication: AuthenticationModule, val hosts: Hosts, client: ElasticClient) extends BaseController {
 
   def getIndices = process { request =>
     client.getIndices(request.target).map {
       case Success(status, indices) => CerebroResponse(status, OpenIndices(indices))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)     => CerebroResponse(status, error)
     }
   }
 
@@ -24,7 +22,7 @@ class AnalysisController @Inject()(val authentication: AuthenticationModule,
     val index = request.get("index")
     client.getIndexSettings(index, request.target).map {
       case Success(status, settings) => CerebroResponse(status, IndexAnalyzers(index, settings))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)      => CerebroResponse(status, error)
     }
   }
 
@@ -32,27 +30,27 @@ class AnalysisController @Inject()(val authentication: AuthenticationModule,
     val index = request.get("index")
     client.getIndexMapping(index, request.target).map {
       case Success(status, mapping) => CerebroResponse(status, IndexFields(index, mapping))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)     => CerebroResponse(status, error)
     }
   }
 
   def analyzeByField = process { request =>
     val index = request.get("index")
     val field = request.get("field")
-    val text = request.get("text")
+    val text  = request.get("text")
     client.analyzeTextByField(index, field, text, request.target).map {
       case Success(status, tokens) => CerebroResponse(status, Tokens(tokens))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)    => CerebroResponse(status, error)
     }
   }
 
   def analyzeByAnalyzer = process { request =>
-    val index = request.get("index")
+    val index    = request.get("index")
     val analyzer = request.get("analyzer")
-    val text = request.get("text")
+    val text     = request.get("text")
     client.analyzeTextByAnalyzer(index, analyzer, text, request.target).map {
       case Success(status, tokens) => CerebroResponse(status, Tokens(tokens))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)    => CerebroResponse(status, error)
     }
   }
 

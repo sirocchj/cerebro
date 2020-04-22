@@ -25,7 +25,7 @@ object NodeRoles {
 
       case None => // 2.X
         val master = truthy((nodeInfo \ "attributes" \ "master").asOpt[String].getOrElse("true"))
-        val data = truthy((nodeInfo \ "attributes" \ "data").asOpt[String].getOrElse("true"))
+        val data   = truthy((nodeInfo \ "attributes" \ "data").asOpt[String].getOrElse("true"))
         val client = truthy((nodeInfo \ "attributes" \ "client").asOpt[String].getOrElse("false"))
 
         NodeRoles(

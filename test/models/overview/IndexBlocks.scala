@@ -4,8 +4,9 @@ import play.api.libs.json.{JsObject, Json}
 
 object IndexBlocks {
 
-  val closed: JsObject = Json.parse(
-    """
+  val closed: JsObject = Json
+    .parse(
+      """
       |{
       |  "4": {
       |    "description": "index closed",
@@ -17,6 +18,7 @@ object IndexBlocks {
       |  }
       |}
     """.stripMargin
-  ).as[JsObject]
+    )
+    .as[JsObject]
 
 }

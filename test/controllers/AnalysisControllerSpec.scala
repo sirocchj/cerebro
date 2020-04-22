@@ -105,10 +105,9 @@ object AnalysisControllerSpec extends MockedServices {
       """.stripMargin
     )
     client.analyzeTextByAnalyzer("foo", "bar", "qux", ElasticServer(Host("somehost"))) returns Future.successful(Success(200, expectedResponse))
-    val params = Json.obj("host" -> "somehost", "index" -> "foo", "analyzer" -> "bar", "text" -> "qux")
+    val params   = Json.obj("host" -> "somehost", "index" -> "foo", "analyzer" -> "bar", "text" -> "qux")
     val response = route(application, FakeRequest(POST, "/analysis/analyze/analyzer").withBody(params)).get
-    val expected = Json.parse(
-      """
+    val expected = Json.parse("""
         |[
         |  {
         |    "token": "foobar",
@@ -139,10 +138,9 @@ object AnalysisControllerSpec extends MockedServices {
       """.stripMargin
     )
     client.analyzeTextByField("foo", "bar", "qux", ElasticServer(Host("somehost"))) returns Future.successful(Success(200, expectedResponse))
-    val params = Json.obj("host" -> "somehost", "index" -> "foo", "field" -> "bar", "text" -> "qux")
+    val params   = Json.obj("host" -> "somehost", "index" -> "foo", "field" -> "bar", "text" -> "qux")
     val response = route(application, FakeRequest(POST, "/analysis/analyze/field").withBody(params)).get
-    val expected = Json.parse(
-      """
+    val expected = Json.parse("""
         |[
         |  {
         |    "token": "foobar",

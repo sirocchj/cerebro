@@ -1,7 +1,7 @@
 package models.overview
 
 import org.specs2.Specification
-import play.api.libs.json.{ JsFalse, JsTrue, Json }
+import play.api.libs.json.{JsFalse, JsTrue, Json}
 
 object IndexSpec extends Specification {
 

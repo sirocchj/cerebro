@@ -129,7 +129,10 @@ object IndexFieldsSpec extends Specification {
         |}
       """.stripMargin
     )
-    IndexFields("index_name", data) mustEqual Json.arr("object_type.first_level_property.second_level_property", "object_type.first_level_property_2.second_level_property")
+    IndexFields("index_name", data) mustEqual Json.arr(
+      "object_type.first_level_property.second_level_property",
+      "object_type.first_level_property_2.second_level_property"
+    )
   }
 
 }

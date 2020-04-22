@@ -3,7 +3,6 @@ package models
 import org.specs2.Specification
 import play.api.libs.json.Json
 
-
 object IndexMetadataSpec extends Specification {
 
   def is =
@@ -12,7 +11,6 @@ object IndexMetadataSpec extends Specification {
         should extract mappings and settings from metadata          $parse
 
       """
-
 
   def parse = {
     val data = Json.parse(

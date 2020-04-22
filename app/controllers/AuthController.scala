@@ -7,31 +7,28 @@ import controllers.auth.{AuthAction, AuthenticationModule}
 import forms.LoginForm
 import play.api.Configuration
 import play.api.mvc.InjectedController
-
-
 @Singleton
-class AuthController @Inject()(system: ActorSystem,
-                               authentication: AuthenticationModule,
-                               configuration: Configuration)
-  extends InjectedController {
+class AuthController @Inject() (system: ActorSystem, authentication: AuthenticationModule, configuration: Configuration) extends InjectedController {
 
   import AuthController._
 
   private val badFormMsg = "invalid login form data"
 
-
   def index = Action { implicit request =>
     if (authentication.isEnabled) {
-      request.session.get(AuthAction.SESSION_USER).map { user =>
-        request.session.get(AuthAction.REDIRECT_URL) match {
-          case Some(url) =>
-            Redirect(url, play.api.http.Status.SEE_OTHER)
-          case None =>
-            Redirect(routes.Application.index())
+      request.session
+        .get(AuthAction.SESSION_USER)
+        .map { user =>
+          request.session.get(AuthAction.REDIRECT_URL) match {
+            case Some(url) =>
+              Redirect(url, play.api.http.Status.SEE_OTHER)
+            case None =>
+              Redirect(routes.Application.index())
+          }
         }
-      }.getOrElse {
-        Ok(views.html.auth.login())
-      }
+        .getOrElse {
+          Ok(views.html.auth.login())
+        }
     } else {
       Redirect(routes.Application.index())
     }
@@ -49,7 +46,7 @@ class AuthController @Inject()(system: ActorSystem,
             val resp =
               request.session.get(AuthAction.REDIRECT_URL) match {
                 case Some(url) => Redirect(url, play.api.http.Status.SEE_OTHER)
-                case None => Redirect(routes.Application.index())
+                case None      => Redirect(routes.Application.index())
               }
             resp.withSession(AuthAction.SESSION_USER -> username)
           case None =>

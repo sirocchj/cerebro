@@ -59,7 +59,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToDelete = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/delete_indices").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -83,7 +83,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToRefresh = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/refresh_indices").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -107,7 +107,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToFlush = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/flush_indices").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -131,7 +131,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToClearCache = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/clear_indices_cache").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -155,7 +155,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToForceMerge = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/force_merge").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -175,7 +175,7 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToOpenIndices = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/open_indices").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
@@ -195,8 +195,8 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndicesToCloseIndices = {
-    val body = Json.obj("host" -> "somehost")
-    val result= route(application, FakeRequest(POST, "/overview/close_indices").withBody(body)).get
+    val body   = Json.obj("host" -> "somehost")
+    val result = route(application, FakeRequest(POST, "/overview/close_indices").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter indices"))
   }
 
@@ -209,23 +209,22 @@ object OverviewControllerSpec extends MockedServices {
   }
 
   def missingIndexToFetchShardStats = {
-    val body = Json.obj("host" -> "somehost")
+    val body   = Json.obj("host" -> "somehost")
     val result = route(application, FakeRequest(POST, "/overview/get_shard_stats").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter index"))
   }
 
   def missingShardToFetchShardStats = {
-    val body = Json.obj("host" -> "somehost", "index" -> "foo")
+    val body   = Json.obj("host" -> "somehost", "index" -> "foo")
     val result = route(application, FakeRequest(POST, "/overview/get_shard_stats").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter shard"))
   }
 
   def missingNodeToFetchShardStats = {
-    val body = Json.obj("host" -> "somehost", "index" -> "foo", "shard" -> 1)
+    val body   = Json.obj("host" -> "somehost", "index" -> "foo", "shard" -> 1)
     val result = route(application, FakeRequest(POST, "/overview/get_shard_stats").withBody(body)).get
     ensure(result, 400, Json.obj("error" -> "Missing required parameter node"))
   }
-
 
   def enableShardAllocation = {
     val expectedResponse = Json.parse(

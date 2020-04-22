@@ -10,7 +10,7 @@ import services.exception.RequestFailedException
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class OverviewDataService @Inject()(client: ElasticClient) {
+class OverviewDataService @Inject() (client: ElasticClient) {
 
   def overview(target: ElasticServer): Future[JsValue] = {
     val apis = Seq(

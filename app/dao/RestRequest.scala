@@ -10,9 +10,13 @@ case class HashedRestRequest(path: String, method: String, body: String, usernam
 
 case class RestRequest(path: String, method: String, body: String, username: String, createdAt: Date) {
 
-  val md5 = MessageDigest.getInstance("MD5").digest(
-    (path + method + body + username).getBytes
-  ).map("%02x".format(_)).mkString
+  val md5 = MessageDigest
+    .getInstance("MD5")
+    .digest(
+      (path + method + body + username).getBytes
+    )
+    .map("%02x".format(_))
+    .mkString
 
 }
 

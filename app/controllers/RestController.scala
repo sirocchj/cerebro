@@ -16,23 +16,23 @@ import scala.util.Try
 import scala.util.control.NonFatal
 import play.api.Logger
 
-class RestController @Inject()(val authentication: AuthenticationModule,
-                               val hosts: Hosts,
-                               client: ElasticClient,
-                               restHistoryDAO: RestHistoryDAO) extends BaseController {
+class RestController @Inject() (val authentication: AuthenticationModule, val hosts: Hosts, client: ElasticClient, restHistoryDAO: RestHistoryDAO)
+    extends BaseController {
 
   private val logger = Logger("application")
 
   def request = process { request =>
     val method = request.get("method")
-    val path = request.get("path")
-    val body = request.getObjOpt("data")
+    val path   = request.get("path")
+    val body   = request.getObjOpt("data")
     client.executeRequest(method, path, body, request.target).map {
       case s: Success =>
-        val bodyAsString = body.map {
-          case JsString(str) => str
-          case other => other.toString()
-        }.getOrElse("{}")
+        val bodyAsString = body
+          .map {
+            case JsString(str) => str
+            case other         => other.toString()
+          }
+          .getOrElse("{}")
         val username = request.user.map(_.name).getOrElse("")
         Try(restHistoryDAO.save(RestRequest(path, method, bodyAsString, username, new Date(System.currentTimeMillis)))).recover {
           case DAOException(msg, e) => logger.error(msg, e)
@@ -59,22 +59,25 @@ class RestController @Inject()(val authentication: AuthenticationModule,
 
   def history = process { request =>
     implicit val writes = Json.writes[RestRequest]
-    val dateFormat = new SimpleDateFormat("dd/MM HH:mm:ss")
-    restHistoryDAO.all(request.user.map(_.name).getOrElse("")).map {
-      case requests =>
-        val body = requests.map { request =>
-          Json.obj(
-            "path" -> JsString(request.path),
-            "method" -> JsString(request.method),
-            "body" -> JsString(request.body),
-            "created_at" -> JsString(dateFormat.format(request.createdAt))
-          )
-        }
-        CerebroResponse(200, JsArray(body))
-    }.recover {
-      case NonFatal(e) =>
-        CerebroResponse(500, Json.obj("Error" -> JsString(s"Error while loading requests history: ${e.getMessage}")))
-    }
+    val dateFormat      = new SimpleDateFormat("dd/MM HH:mm:ss")
+    restHistoryDAO
+      .all(request.user.map(_.name).getOrElse(""))
+      .map {
+        case requests =>
+          val body = requests.map { request =>
+            Json.obj(
+              "path"       -> JsString(request.path),
+              "method"     -> JsString(request.method),
+              "body"       -> JsString(request.body),
+              "created_at" -> JsString(dateFormat.format(request.createdAt))
+            )
+          }
+          CerebroResponse(200, JsArray(body))
+      }
+      .recover {
+        case NonFatal(e) =>
+          CerebroResponse(500, Json.obj("Error" -> JsString(s"Error while loading requests history: ${e.getMessage}")))
+      }
   }
 
 }

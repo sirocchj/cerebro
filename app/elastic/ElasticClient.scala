@@ -102,12 +102,26 @@ trait ElasticClient {
 
   def deleteSnapshot(repository: String, snapshot: String, target: ElasticServer): Future[ElasticResponse]
 
-  def createSnapshot(repository: String, snapshot: String, ignoreUnavailable: Boolean,
-                     includeGlobalState: Boolean, indices: Option[String], target: ElasticServer): Future[ElasticResponse]
+  def createSnapshot(
+      repository: String,
+      snapshot: String,
+      ignoreUnavailable: Boolean,
+      includeGlobalState: Boolean,
+      indices: Option[String],
+      target: ElasticServer
+  ): Future[ElasticResponse]
 
-  def restoreSnapshot(repository: String, snapshot: String, renamePattern: Option[String],
-                      renameReplacement: Option[String], ignoreUnavailable: Boolean, includeAliases: Boolean,
-                      includeGlobalState: Boolean, indices: Option[String], target: ElasticServer): Future[ElasticResponse]
+  def restoreSnapshot(
+      repository: String,
+      snapshot: String,
+      renamePattern: Option[String],
+      renameReplacement: Option[String],
+      ignoreUnavailable: Boolean,
+      includeAliases: Boolean,
+      includeGlobalState: Boolean,
+      indices: Option[String],
+      target: ElasticServer
+  ): Future[ElasticResponse]
 
   def saveClusterSettings(settings: JsValue, target: ElasticServer): Future[ElasticResponse]
 

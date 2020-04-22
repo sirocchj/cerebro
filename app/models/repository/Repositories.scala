@@ -9,12 +9,13 @@ object Repositories {
     json match {
       case JsObject(repositories) =>
         JsArray(
-          repositories.map { case (name, info) =>
-            Json.obj(
-              "name" -> name,
-              "type" -> (info \ "type").as[JsValue],
-              "settings" -> (info \ "settings").asOpt[JsObject].getOrElse[JsObject](Json.obj())
-            )
+          repositories.map {
+            case (name, info) =>
+              Json.obj(
+                "name"     -> name,
+                "type"     -> (info \ "type").as[JsValue],
+                "settings" -> (info \ "settings").asOpt[JsObject].getOrElse[JsObject](Json.obj())
+              )
           }.toSeq
         )
       case _ => throw UnexpectedResponseFormatException(json)
