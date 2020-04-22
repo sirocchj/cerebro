@@ -6,9 +6,13 @@ object Aliases {
 
   def apply(json: JsValue): JsValue = {
     // NOTE: ES < 1.5 does not return aliases if no aliases is found
-    val indices = json.as[JsObject].value.collect {
-      case (index, info) if hasAliases(info) => flattenIndexAliases(index, (info \ "aliases").as[JsObject])
-    }.flatten
+    val indices = json
+      .as[JsObject]
+      .value
+      .collect {
+        case (index, info) if hasAliases(info) => flattenIndexAliases(index, (info \ "aliases").as[JsObject])
+      }
+      .flatten
     JsArray(indices.toSeq)
   }
 

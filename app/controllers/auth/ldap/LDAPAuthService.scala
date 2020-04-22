@@ -11,7 +11,7 @@ import play.api.{Configuration, Logger}
 
 import scala.util.control.NonFatal
 
-class LDAPAuthService @Inject()(globalConfig: Configuration) extends AuthService {
+class LDAPAuthService @Inject() (globalConfig: Configuration) extends AuthService {
 
   private val log = Logger(this.getClass)
 
@@ -45,7 +45,7 @@ class LDAPAuthService @Inject()(globalConfig: Configuration) extends AuthService
     controls.setSearchScope(SearchControls.SUBTREE_SCOPE)
     try {
       val context = LdapCtxFactory.getLdapCtxInstance(config.url, props)
-      val search = context.search(groupConfig.baseDN,s"(& (${groupConfig.userAttr}=$user)(${groupConfig.group}))", controls)
+      val search  = context.search(groupConfig.baseDN, s"(& (${groupConfig.userAttr}=$user)(${groupConfig.group}))", controls)
       context.close()
       search.hasMore()
     } catch {

@@ -42,8 +42,7 @@ object ClusterSettingsControllerSpec extends MockedServices {
         |}
       """.stripMargin
     )
-    val expectedResponse = Json.parse(
-      """
+    val expectedResponse = Json.parse("""
         |{
         |  "acknowledged":true,
         |  "persistent": {},

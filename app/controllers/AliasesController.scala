@@ -9,22 +9,18 @@ import play.api.libs.json.JsArray
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class AliasesController @Inject()(val authentication: AuthenticationModule,
-                                  val hosts: Hosts,
-                                  client: ElasticClient) extends BaseController {
+class AliasesController @Inject() (val authentication: AuthenticationModule, val hosts: Hosts, client: ElasticClient) extends BaseController {
 
   def getAliases = process { request =>
     client.getAliases(request.target).map {
       case Success(status, aliases) => CerebroResponse(status, Aliases(aliases))
-      case Error(status, error) => CerebroResponse(status, error)
+      case Error(status, error)     => CerebroResponse(status, error)
     }
   }
 
   def updateAliases = process { request =>
     val changes = request.getOptArray("changes").getOrElse(JsArray()).value
-    client.updateAliases(changes, request.target).map { aliases =>
-      CerebroResponse(aliases.status, aliases.body)
-    }
+    client.updateAliases(changes, request.target).map { aliases => CerebroResponse(aliases.status, aliases.body) }
   }
 
 }

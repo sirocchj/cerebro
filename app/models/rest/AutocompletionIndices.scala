@@ -6,9 +6,16 @@ object AutocompletionIndices {
 
   def apply(aliases: JsValue): JsArray =
     JsArray(
-      aliases.as[JsObject].value.flatMap { case (idx, data) =>
-        (data \ "aliases").as[JsObject].keys + idx
-      }.toSeq.distinct.map(JsString)
+      aliases
+        .as[JsObject]
+        .value
+        .flatMap {
+          case (idx, data) =>
+            (data \ "aliases").as[JsObject].keys + idx
+        }
+        .toSeq
+        .distinct
+        .map(JsString)
     )
 
 }

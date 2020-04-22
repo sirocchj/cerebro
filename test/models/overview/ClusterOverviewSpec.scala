@@ -23,10 +23,10 @@ object ClusterOverviewSpec extends Specification {
       return state of shard allocation       $shardAllocation
       """
 
-  val clusterWithoutData = ClusterWithoutData()
-  val clusterWithData = ClusterWithData()
-  val clusterInitializing = ClusterInitializingShards()
-  val clusterRelocating = ClusterRelocatingShards()
+  val clusterWithoutData       = ClusterWithoutData()
+  val clusterWithData          = ClusterWithData()
+  val clusterInitializing      = ClusterInitializingShards()
+  val clusterRelocating        = ClusterRelocatingShards()
   val clusterDiabledAllocation = ClusterDisabledAllocation()
 
   def clusterName = {

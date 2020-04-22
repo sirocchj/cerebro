@@ -9,16 +9,12 @@ import play.api.libs.json.{JsObject, Json}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class NavbarController @Inject()(val authentication: AuthenticationModule,
-                                 val hosts: Hosts,
-                                 client: ElasticClient) extends BaseController {
+class NavbarController @Inject() (val authentication: AuthenticationModule, val hosts: Hosts, client: ElasticClient) extends BaseController {
 
   def index = process { request =>
     client.clusterHealth(request.target).map {
       case Success(status, health) =>
-        val body = request.user.fold(health) { user =>
-          health.as[JsObject] ++ Json.obj("username" -> user.name)
-        }
+        val body = request.user.fold(health) { user => health.as[JsObject] ++ Json.obj("username" -> user.name) }
         CerebroResponse(status, body)
 
       case Error(status, error) =>

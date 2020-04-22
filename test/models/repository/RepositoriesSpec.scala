@@ -51,8 +51,8 @@ object RepositoriesSpec extends Specification {
     )
     Repositories(data) mustEqual Json.arr(
       Json.obj(
-        "name" -> "some_repo_with_settings",
-        "type" -> "s3",
+        "name"     -> "some_repo_with_settings",
+        "type"     -> "s3",
         "settings" -> Json.obj()
       )
     )

@@ -45,7 +45,7 @@ object CerebroRequest {
 
     val requestAuth = (username, password) match {
       case (Some(u), Some(p)) => Some(ESAuth(u, p))
-      case _ => None
+      case _                  => None
     }
 
     val server = hosts.getHost(hostName) match {

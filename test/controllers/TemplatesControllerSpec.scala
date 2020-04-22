@@ -90,8 +90,7 @@ object TemplatesControllerSpec extends MockedServices {
   }
 
   def create = {
-    val template = Json.parse(
-      """
+    val template = Json.parse("""
         |{
         |  "whatever": {}
         |}
@@ -108,13 +107,13 @@ object TemplatesControllerSpec extends MockedServices {
   }
 
   def requireNameCreate = {
-    val body = Json.obj("host" -> "somehost")
+    val body     = Json.obj("host" -> "somehost")
     val response = route(application, FakeRequest(POST, "/templates/create").withBody(body)).get
     ensure(response, 400, Json.parse("{\"error\":\"Missing required parameter name\"}"))
   }
 
   def requireNameTemplate = {
-    val body = Json.obj("host" -> "somehost", "name" -> "any")
+    val body     = Json.obj("host" -> "somehost", "name" -> "any")
     val response = route(application, FakeRequest(POST, "/templates/create").withBody(body)).get
     ensure(response, 400, Json.parse("{\"error\":\"Missing required parameter template\"}"))
   }

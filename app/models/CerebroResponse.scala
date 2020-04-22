@@ -9,7 +9,7 @@ object CerebroResponse {
     Ok(
       Json.obj(
         "status" -> status,
-        "body" -> body
+        "body"   -> body
       )
     )
   }

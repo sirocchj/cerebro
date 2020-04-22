@@ -38,13 +38,13 @@ object RestControllerSpec extends MockedServices {
   }
 
   def missingPath = {
-    val body = Json.obj("host" -> "somehost", "method" -> "GET")
+    val body     = Json.obj("host" -> "somehost", "method" -> "GET")
     val response = route(application, FakeRequest(POST, "/rest/request").withBody(body)).get
     ensure(response, 400, Json.obj("error" -> "Missing required parameter path"))
   }
 
   def missingMethod = {
-    val body = Json.obj("host" -> "somehost", "path" -> "GET")
+    val body     = Json.obj("host" -> "somehost", "path" -> "GET")
     val response = route(application, FakeRequest(POST, "/rest/request").withBody(body)).get
     ensure(response, 400, Json.obj("error" -> "Missing required parameter method"))
   }

@@ -16,11 +16,10 @@ object CerebroRequestSpec extends Specification with Mockito {
       """
 
   private def forwardHeaders = {
-    val user = None
+    val user             = None
     val whitelistHeaders = Seq("a-header")
-    val body = Json.obj("host" -> "host1")
-    val host
-    = Host("host1", None, whitelistHeaders)
+    val body             = Json.obj("host" -> "host1")
+    val host             = Host("host1", None, whitelistHeaders)
 
     val request = mock[AuthRequest[JsValue]]
     request.body returns body

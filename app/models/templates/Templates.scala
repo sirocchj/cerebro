@@ -6,9 +6,7 @@ object Templates {
 
   def apply(json: JsValue): JsValue = {
     val names = json.as[JsObject].keys
-    JsArray(names.map { name =>
-      Json.obj("name" -> name, "template" -> (json \ name).as[JsValue])
-    }.toSeq)
+    JsArray(names.map { name => Json.obj("name" -> name, "template" -> (json \ name).as[JsValue]) }.toSeq)
   }
 
 }

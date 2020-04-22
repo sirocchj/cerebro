@@ -4,7 +4,6 @@ import play.api.libs.json.Json
 
 object IndexStats {
 
-
   val stats = Json.parse(
     """
       |{

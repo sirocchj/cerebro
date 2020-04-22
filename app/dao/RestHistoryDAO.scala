@@ -12,8 +12,6 @@ import slick.lifted.TableQuery
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.control.NonFatal
-
-
 @ImplementedBy(classOf[RestHistoryDAOImpl])
 trait RestHistoryDAO {
 
@@ -25,8 +23,7 @@ trait RestHistoryDAO {
 
 }
 
-class RestHistoryDAOImpl @Inject()(dbConfigProvider: DatabaseConfigProvider,
-                                   config: Configuration) extends RestHistoryDAO {
+class RestHistoryDAOImpl @Inject() (dbConfigProvider: DatabaseConfigProvider, config: Configuration) extends RestHistoryDAO {
 
   private val max = config.getOptional[Int]("rest.history.size").getOrElse(50)
 
@@ -35,17 +32,18 @@ class RestHistoryDAOImpl @Inject()(dbConfigProvider: DatabaseConfigProvider,
   private val requests = TableQuery[RestRequests]
 
   def all(username: String): Future[Seq[RestRequest]] =
-    dbConfig.db.run(requests.filter(_.username === username).sortBy(_.createdAt.desc).result).map { reqs =>
-      reqs.map { r => RestRequest(r.path, r.method, r.body, r.username, new Date(r.createdAt)) }
-    }.recover {
-      case NonFatal(e) => throw DAOException(s"Error loading requests for [$username]", e)
-    }
+    dbConfig.db
+      .run(requests.filter(_.username === username).sortBy(_.createdAt.desc).result)
+      .map { reqs => reqs.map { r => RestRequest(r.path, r.method, r.body, r.username, new Date(r.createdAt)) } }
+      .recover {
+        case NonFatal(e) => throw DAOException(s"Error loading requests for [$username]", e)
+      }
 
   def save(req: RestRequest): Future[Option[String]] =
     findByMd5(req.md5).flatMap {
       case Some(p) =>
         update(p, req.createdAt.getTime)
-      case None    =>
+      case None =>
         create(req).map { md5 => trim(req.username); md5 }
     }
 
@@ -60,7 +58,7 @@ class RestHistoryDAOImpl @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }
 
   private def update(req: RestRequests#TableElementType, createdAt: Long): Future[Option[String]] = {
-    val q = for { r <- requests if r.md5 === req.md5 } yield r.createdAt
+    val q      = for { r <- requests if r.md5 === req.md5 } yield r.createdAt
     val action = q.update(createdAt)
     dbConfig.db.run(action).map { _ => Some(req.md5) }.recover {
       case NonFatal(e) => throw DAOException(s"Error while updating request [$req]", e)
