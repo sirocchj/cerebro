@@ -3,7 +3,6 @@ jdk:
 - openjdk11
 scala:
 - 2.12.11
-sbt_args: -Dfile.encoding=UTF8 -Dsbt.color=always -Dsbt.supershell=false
 before_cache:
 - rm -fv $HOME/.ivy2/.sbt.ivy.lock
 - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
@@ -14,7 +13,7 @@ cache:
   - "$HOME/.ivy2/cache"
   - "$HOME/.sbt"
 script:
-- sbt ++$TRAVIS_SCALA_VERSION scalafmtCheckAll scalafmtSbtCheck test universal:packageZipTarball
+- sbt -Dfile.encoding=UTF8 -Dsbt.color=always -Dsbt.supershell=false ++$TRAVIS_SCALA_VERSION scalafmtCheckAll scalafmtSbtCheck test universal:packageZipTarball
 before_deploy:
 - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 deploy:
