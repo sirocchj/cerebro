@@ -1,32 +1,35 @@
 language: scala
-
 jdk:
-  - openjdk11
-
+- openjdk11
 scala:
-  - 2.12.11
-
+- 2.12.11
+sbt_args: -Dfile.encoding=UTF8 -Dsbt.color=always -Dsbt.supershell=false
 before_cache:
-  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
-  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
-  - find $HOME/.sbt        -name "*.lock"               -print -delete
-
+- rm -fv $HOME/.ivy2/.sbt.ivy.lock
+- find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+- find $HOME/.sbt        -name "*.lock"               -print -delete
 cache:
   directories:
-    - $HOME/.cache/coursier
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt
-
+  - "$HOME/.cache/coursier"
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt"
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION test
-
+- sbt ++$TRAVIS_SCALA_VERSION scalafmtCheckAll scalafmtSbtChecktest universal:packageZipTarball
 before_deploy:
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-
+- echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 deploy:
-  - provider: script
-    skip_cleanup: true
-    script: sbt ++$TRAVIS_SCALA_VERSION docker:publish
-    on:
-      tags: true
-      condition: "$TRAVIS_TAG =~ ^v"
+- provider: releases
+  api_key:
+    secure: hH9kN1PrGLB3dCd8ugS3or/Q6tll0Yjd08epKMIDNCDPeD0yxfPwlugM8v1T6WsQ+nMiUuD21uXpXPRCbolRQmuCiZHAagutmaK0q/Z+pO0ELjRe4ey/i4gs+TNKmZ4M2C8qjdBO1dIjWSJzsVDKk5iwlW6xN3AKxg4wEkC9clzbpvcaCBJ8qkgvy4j8LC+dRPsg6vVHwMTfpvni32xzuXMLBMXbeGFjJSAG7PyhtgXWY6YgYA4qbH7Ipfn4m7nj5j0AYLtwVFWlzF+X3/128McXGJNuDFjQ4rDQH2Vycv2yNf1vEJTTEvGEdUbtIqoSYH7qDyNMhCHLDOqaiAGvLJ6HDs8HGn1dSJ4HVdOLy6pavsGAVhxHG8wJMGW108Ixhs261e7cyahmwDTjyj3Hxx8J+R+6Zgk+57X7Ni1fDJetsBqesUonxACOC8zG2nfK6otdTIjN2p5lDCd2ItUJCfD0+a9G9ZIvqqakn8VoiWsUb6NFB1weF3ewYHY3nCf9IYvcS2Jm4iau+IwvLo3DgJ67FVFnh5HP/Lqv7cyu7zqfvlNOoKB2GP94Mk1E0g5M8Urhuqn8kXvL38FcNr1a1Ng80zod+nx2HNO5xSy/lXm8Z/6CpmZpcO9S35gVeQo5gCV89GSww+iTcCCOgGG9nJJ//TTrOrLspA8w8jtA9fc=
+  file_glob: true
+  file: target/universal/cerebro-*.tgz
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_TAG =~ ^v
+- provider: script
+  skip_cleanup: true
+  script: sbt ++$TRAVIS_SCALA_VERSION docker:publish
+  on:
+    tags: true
+    condition: $TRAVIS_TAG =~ ^v
