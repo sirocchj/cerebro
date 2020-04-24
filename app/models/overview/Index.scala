@@ -66,7 +66,9 @@ object Index {
           shards.as[JsArray].value.flatMap(parseShard(_))
       }
       .groupBy(_._1)
+      .view
       .mapValues(v => JsArray(v.map(_._2)))
+      .toMap
   }
 
   /**

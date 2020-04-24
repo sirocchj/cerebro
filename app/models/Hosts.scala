@@ -5,8 +5,9 @@ import javax.inject.Singleton
 import com.google.inject.{ImplementedBy, Inject}
 import play.api.Configuration
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters.ListHasAsScala
 import scala.util.{Failure, Success, Try}
+
 @ImplementedBy(classOf[HostsImpl])
 trait Hosts {
 
