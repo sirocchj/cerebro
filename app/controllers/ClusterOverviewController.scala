@@ -21,7 +21,8 @@ class ClusterOverviewController @Inject() (
   def index = process { request => service.overview(request.target).map(CerebroResponse(200, _)) }
 
   def disableShardAllocation = process { request =>
-    client.disableShardAllocation(request.target).map { response => CerebroResponse(response.status, response.body) }
+    val kind = request.get("kind")
+    client.disableShardAllocation(request.target, kind).map { response => CerebroResponse(response.status, response.body) }
   }
 
   def enableShardAllocation = process { request =>
