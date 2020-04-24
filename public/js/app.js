@@ -1415,8 +1415,8 @@ angular.module('cerebro').controller('OverviewController', ['$scope', '$http',
       OverviewDataService.getIndexMapping(index, displayInfo, error);
     };
 
-    $scope.disableShardAllocation = function() {
-      OverviewDataService.disableShardAllocation(success, error);
+    $scope.disableShardAllocation = function(kind) {
+      OverviewDataService.disableShardAllocation(kind, success, error);
     };
 
     $scope.enableShardAllocation = function() {
@@ -1519,8 +1519,9 @@ angular.module('cerebro').factory('OverviewDataService', ['DataService',
       DataService.send('overview/enable_shard_allocation', {}, success, error);
     };
 
-    this.disableShardAllocation = function(success, error) {
-      DataService.send('overview/disable_shard_allocation', {}, success, error);
+    this.disableShardAllocation = function(kind, success, err) {
+      var data = {kind: kind};
+      DataService.send('overview/disable_shard_allocation', data, success, err);
     };
 
     this.getShardStats = function(index, node, shard, success, error) {
@@ -1681,7 +1682,7 @@ angular.module('cerebro').controller('RestController', ['$scope', '$http',
     $scope.indices = undefined;
     $scope.host = undefined;
 
-    $scope.method = 'POST';
+    $scope.method = 'GET';
     $scope.path = '';
     $scope.options = [];
 
