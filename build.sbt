@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.docker.{DockerChmodType, DockerPermissionStrategy}
 
 name := "cerebro"
-scalaVersion := "2.12.11"
+scalaVersion := "2.13.1"
 
 enablePlugins(BuildInfoPlugin, JavaServerAppPackaging, LauncherJarPlugin, PlayScala)
 

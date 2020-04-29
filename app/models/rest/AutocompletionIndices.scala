@@ -11,7 +11,7 @@ object AutocompletionIndices {
         .value
         .flatMap {
           case (idx, data) =>
-            (data \ "aliases").as[JsObject].keys + idx
+            (data \ "aliases").as[JsObject].keys.to(Set) + idx
         }
         .toSeq
         .distinct
